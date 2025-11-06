@@ -11,7 +11,9 @@ fn main() {
         return;
     }
 
-    let day: u8 = args[1].parse().expect("Day must be a number between 1 and 25");
+    let day: u8 = args[1]
+        .parse()
+        .expect("Day must be a number between 1 and 25");
 
     if !(1..=25).contains(&day) {
         println!("Day must be between 1 and 25");
@@ -26,8 +28,6 @@ fn main() {
     match day {
         1 => days::day01::solve(),
         // Add more days here as you implement them
-        // 2 => days::day02::solve(),
-        // 3 => days::day03::solve(),
         _ => println!("Day {} not yet implemented", day),
     }
 
