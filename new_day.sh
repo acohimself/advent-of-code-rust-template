@@ -65,9 +65,7 @@ echo "✓ Created $DAY_FILE"
 
 # Update src/days.rs
 if ! grep -q "pub mod day${DAY_PADDED};" src/days.rs; then
-    # Find the line with the last pub mod and insert after it
-    sed -i.bak "/^pub mod day/a\\
-pub mod day${DAY_PADDED};" src/days.rs && rm src/days.rs.bak
+    echo "pub mod day${DAY_PADDED};" >> src/days.rs
     echo "✓ Added module to src/days.rs"
 else
     echo "⚠ Module already exists in src/days.rs"
@@ -75,10 +73,9 @@ fi
 
 # Update src/main.rs
 if ! grep -q "$DAY => days::day${DAY_PADDED}::solve()" src/main.rs; then
-    # Find the last day match arm and insert after it
-    LAST_DAY=$(grep -o '[0-9]* => days::day' src/main.rs | head -1 | cut -d' ' -f1)
-    sed -i.bak "/$LAST_DAY => days::day/a\\
-        $DAY => days::day${DAY_PADDED}::solve()," src/main.rs && rm src/main.rs.bak
+    # Insert before the _ => default case
+    sed -i.bak "s/        _ => /        $DAY => days::day${DAY_PADDED}::solve(),\\
+        _ => /" src/main.rs && rm src/main.rs.bak
     echo "✓ Added day to src/main.rs"
 else
     echo "⚠ Day already exists in src/main.rs"
